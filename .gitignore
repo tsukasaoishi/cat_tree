@@ -13,3 +13,4 @@
 *.a
 mkmf.log
 bundle
+spec/cat_tree_test.sqlite3
