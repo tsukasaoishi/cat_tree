@@ -1,5 +1,5 @@
 require "cat_tree/version"
-
-module CatTree
-  # Your code goes here...
-end
+require "cat_tree/initializer"
+require "cat_tree/observer"
+require "cat_tree/rack"
+require "cat_tree/railtie" if defined?(Rails)
