@@ -3,6 +3,9 @@
 CatTree monitors ActiveRecord objects in development environment the number of objects, the number of same objects, un-used objects etc.
 It helps you decrease waste of memory and increase application performance.
 
+![CatTree](http://s3-ap-northeast-1.amazonaws.com/kaeruspoon/images/110/large.JPG?1328342672)
+
+
 ## Usage
 
 You can be used by simply installing.
