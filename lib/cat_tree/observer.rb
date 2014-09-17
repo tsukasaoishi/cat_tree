@@ -1,4 +1,5 @@
 require 'active_record'
+require 'cat_tree/logger'
 
 module CatTree
   class Observer
@@ -48,6 +49,7 @@ module CatTree
       yield
     ensure
       ActiveRecord::Base.remove_cat_tree_observer
+      Logger.warn output_message
     end
 
     private
@@ -71,6 +73,23 @@ module CatTree
       @ar_relation[key] = val
       @ar_relation[key][:object] = object
       @ar_relation[key][:caller] = caller
+    end
+
+    def output_message
+      msg = ["", "[CatTree]"]
+      mas << "  ActiveRecord::Base:\t#{ar_base_count}"
+      msg << "  ActiveRecord::Relation:\t#{ar_relation_count}"
+      msg << "  Un-used ActiveRecord::Relation:\t#{unused_ar_relation_count}"
+
+      unless (same_objects = same_ar_base_objects).empty?
+        msg << "  Same objects:"
+        same_objects.each do |obj, count|
+          msg << "    #{obj}:\t#{count}"
+        end
+      end
+      msg << ""
+
+      msg.join("\n")
     end
   end
 end

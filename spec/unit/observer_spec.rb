@@ -63,6 +63,7 @@ describe CatTree::Observer do
     end
 
     it "count same AR:Base object" do
+      @number_of_object += 1
       observer = CatTree::Observer.new
       observer.check do
         User.new

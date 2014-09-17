@@ -18,10 +18,10 @@ Processing by TopController#index as HTML
   ....
 
 [CatTree]
-  ActiveRecord::Base objects:  1023
-  ActiveRecord::Relation object: 2345
-  Un-used ActiveRecord::Relation object: 45
-  Same object:
+  ActiveRecord::Base:     1023
+  ActiveRecord::Relation: 2345
+  Un-used ActiveRecord::Relation: 45
+  Same objects:
     User(id:12):  13
 
 Completed 200 OK in 1121.8ms (Views: 899.0ms | ActiveRecord: 222.8ms)
@@ -51,3 +51,23 @@ Or install it yourself as:
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+
+## Test
+
+I'm glad that you would do test!
+To run the test suite, you need mysql installed.
+How to setup your test environment.
+
+
+```bash
+bundle install --path bundle
+GEM_HOME=bundle/ruby/(your ruby version) gem install bundler --pre
+bundle exec appraisal install
+```
+
+This command run the spec suite for all rails versions supported.
+
+```base
+bundle exec appraisal rake spec
+```
