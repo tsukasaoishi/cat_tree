@@ -84,7 +84,7 @@ module CatTree
       unless (same_objects = same_ar_base_objects).empty?
         msg << "  Same objects:"
         same_objects.keys.sort_by{|k| same_objects[k]}.reverse.each do |obj|
-          msg << "    #{obj}:\t#{same_object[obj]}"
+          msg << "    #{obj}:\t#{same_objects[obj]}"
         end
       end
       msg << ""
