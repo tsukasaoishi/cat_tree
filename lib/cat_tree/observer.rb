@@ -77,7 +77,7 @@ module CatTree
 
     def output_message
       msg = ["", "[CatTree]"]
-      mas << "  ActiveRecord::Base:\t#{ar_base_count}"
+      msg << "  ActiveRecord::Base:\t#{ar_base_count}"
       msg << "  ActiveRecord::Relation:\t#{ar_relation_count}"
       msg << "  Un-used ActiveRecord::Relation:\t#{unused_ar_relation_count}"
 

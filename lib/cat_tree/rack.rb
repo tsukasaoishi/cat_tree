@@ -7,7 +7,7 @@ module CatTree
     end
 
     def call(env)
-      Observor.check do
+      Observer.check do
         @app.call(env)
       end
     end

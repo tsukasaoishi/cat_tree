@@ -6,7 +6,7 @@ require 'rails'
 module CatTree
   class Railtie < Rails::Railtie
     initializer "cat_tree.configure_rails_initialization" do |app|
-      app.config.app_middleware.add  CatTree::Rack
+      app.config.app_middleware.use  CatTree::Rack
       CatTree::Logger.logger = Rails.logger
 
       ActiveSupport.on_load(:active_record) do
