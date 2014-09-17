@@ -36,17 +36,18 @@ module CatTree
         base.alias_method_chain :initialize, :cat_tree
         base.alias_method_chain :initialize_copy, :cat_tree
         base.alias_method_chain :exec_queries, :cat_tree
-        base.extend CatTree::Initializer::ClassMethods
       end
 
       def initialize_with_cat_tree(*args)
-        initialize_without_cat_tree(*args)
-        self.class.cat_tree_notice(self)
+        ret = initialize_without_cat_tree(*args)
+        cat_tree_notice
+        ret
       end
 
       def initialize_copy_with_cat_tree(other)
-        initialize_copy_without_cat_tree(other)
-        self.class.cat_tree_notice(self, :source_id => other.object_id)
+        ret = initialize_copy_without_cat_tree(other)
+        cat_tree_notice(:source_id => other.object_id)
+        ret
       end
 
       private
@@ -55,8 +56,12 @@ module CatTree
         return @records if loaded?
 
         ret = exec_queries_without_cat_tree
-        self.class.cat_tree_notice(self)
+        cat_tree_notice
         ret
+      end
+
+      def cat_tree_notice(options = {})
+        @klass.cat_tree_notice(self, options) if @klass
       end
     end
 

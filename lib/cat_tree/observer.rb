@@ -41,7 +41,7 @@ module CatTree
         key = "#{object.class.name}(id:#{object.id})"
         result[key] += 1
       end
-      result.select{|k,v| v > 1}
+      Hash[*(result.select{|k,v| v > 1}.flatten)]
     end
 
     def check
@@ -83,8 +83,8 @@ module CatTree
 
       unless (same_objects = same_ar_base_objects).empty?
         msg << "  Same objects:"
-        same_objects.each do |obj, count|
-          msg << "    #{obj}:\t#{count}"
+        same_objects.keys.sort_by{|k| same_objects[k]}.reverse.each do |obj|
+          msg << "    #{obj}:\t#{same_object[obj]}"
         end
       end
       msg << ""
