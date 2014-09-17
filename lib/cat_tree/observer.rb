@@ -7,7 +7,7 @@ module CatTree
     end
 
     def initialize
-      @ar_base = Hash.new(0)
+      @ar_base = []
       @ar_relation = {}
     end
 
@@ -23,7 +23,7 @@ module CatTree
     end
 
     def ar_base_count
-      @ar_base.values.inject(0){|t,c| t + c}
+      @ar_base.compact.size
     end
 
     def ar_relation_count
@@ -32,6 +32,15 @@ module CatTree
 
     def unused_ar_relation_count
       @ar_relation.select{|k,v| !v[:object].loaded?}.size
+    end
+
+    def same_ar_base_objects
+      result = Hash.new(0)
+      @ar_base.compact.each do |object|
+        key = "#{object.class.name}(id:#{object.id})"
+        result[key] += 1
+      end
+      result.select{|k,v| v > 1}
     end
 
     def check
@@ -44,8 +53,7 @@ module CatTree
     private
 
     def notice_from_base(object, options)
-      key = "#{object.class.name}_#{object.id}"
-      @ar_base[key] += 1
+      @ar_base << object
     end
 
     def notice_from_relation(object, options)
