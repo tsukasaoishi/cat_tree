@@ -10,7 +10,7 @@ describe CatTree::Observer do
     u.articles.create(:title => "title2")
     u2 = User.create(:name => "cat_tree2")
     u2.articles.create(:title => "title3")
-    @number_of_object = 1#rand(10) + 1
+    @number_of_object = rand(10) + 1
   end
 
   context "#check" do
