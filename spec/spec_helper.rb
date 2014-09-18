@@ -4,16 +4,18 @@ require 'logger'
 require 'cat_tree'
 
 ActiveRecord::Base.establish_connection(
-  :adapter => 'sqlite3',
-  :database => File.join(File.dirname(__FILE__), 'cat_tree_test.sqlite3'),
+  :adapter => 'mysql2',
+  :encoding => 'utf8',
+  :reconnect => false,
+  :database => 'cat_tree_test',
+  :username => 'root',
   :pool =>  5,
   :timeout => 5000
 )
 
 module TruncateTable
   def truncate
-    delete_all
-    connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '#{table_name}'")
+    connection.execute("TRUNCATE TABLE #{table_name}")
   end
 end
 
