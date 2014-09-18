@@ -41,27 +41,6 @@ describe CatTree::Observer do
       expect(observer.ar_base_count).to eq(@number_of_object * 3)
     end
 
-    it "count to create AR::Relation object" do
-      observer = CatTree::Observer.new
-      observer.check do
-        @number_of_object.times { User.where(:name => "cat_tree").first }
-      end
-
-      expect(observer.ar_relation_count).to eq(@number_of_object)
-    end
-
-    it "count un-used AR::Relation object" do
-      observer = CatTree::Observer.new
-      observer.check do
-        @number_of_object.times do
-          User.where(:name => "cat_tree").first
-          User.where(:name => "cat_tree").limit(1)
-        end
-      end
-
-      expect(observer.unused_ar_relation_count).to eq(@number_of_object)
-    end
-
     it "count same AR:Base object" do
       @number_of_object += 1
       observer = CatTree::Observer.new
