@@ -49,7 +49,7 @@ module CatTree
       yield
     ensure
       ActiveRecord::Base.remove_cat_tree_observer
-      Logger.warn output_message
+      output_message
     end
 
     private
@@ -76,6 +76,8 @@ module CatTree
     end
 
     def output_message
+      return if @ar_base.empty? && @ar_relation.empty?
+
       msg = ["", "[CatTree]"]
       msg << "  ActiveRecord::Base:\t#{ar_base_count}"
       msg << "  ActiveRecord::Relation:\t#{ar_relation_count}"
@@ -89,7 +91,7 @@ module CatTree
       end
       msg << ""
 
-      msg.join("\n")
+      Logger.warn msg.join("\n")
     end
   end
 end
