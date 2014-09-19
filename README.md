@@ -1,6 +1,6 @@
 # CatTree
 
-CatTree monitors ActiveRecord objects in development environment the number of objects, the number of same objects, un-used objects etc.
+CatTree monitors ActiveRecord objects in development environment the number of objects and the number of same objects.
 It helps you decrease waste of memory and increase application performance.
 
 ![CatTree](http://s3-ap-northeast-1.amazonaws.com/kaeruspoon/images/110/large.JPG?1328342672)
@@ -18,11 +18,12 @@ Processing by TopController#index as HTML
   ....
 
 [CatTree]
-  ActiveRecord::Base:     1023
-  ActiveRecord::Relation: 2345
-  Un-used ActiveRecord::Relation: 45
+  ActiveRecord::Base:     102
   Same objects:
-    User(id:12):  13
+    User(id:12):  2
+      /Users/tsukasa/dev/kaeruspoon/app/controllers/top_controller.rb:5:in `index'
+
+      /Users/tsukasa/dev/kaeruspoon/app/controllers/top_controller.rb:6:in `index'
 
 Completed 200 OK in 1121.8ms (Views: 899.0ms | ActiveRecord: 222.8ms)
 ```
