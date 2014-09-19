@@ -2,6 +2,7 @@ ENV["RAILS_ENV"]="test"
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'logger'
 require 'cat_tree'
+require File.join(File.dirname(__FILE__), "prepare.rb")
 
 ActiveRecord::Base.establish_connection(
   :adapter => 'mysql2',
