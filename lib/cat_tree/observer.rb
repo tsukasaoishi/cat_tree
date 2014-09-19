@@ -8,22 +8,26 @@ module CatTree
     end
 
     def initialize
-      @ar_base = []
+      @ar_base = {}
     end
 
     def notice(object)
-      @ar_base << object
+      return if object.new_record?
+      key = {:model => object.class.name, :id => object.id}
+      @ar_base[key] ||= {:count => 0, :callers => []}
+      @ar_base[key][:count] += 1
+      @ar_base[key][:callers] << caller
     end
 
     def ar_base_count
-      @ar_base.compact.size
+      @ar_base.values.inject(0){|t,v| t + v[:count]}
     end
 
     def same_ar_base_objects
       result = Hash.new(0)
-      @ar_base.compact.each do |object|
-        key = "#{object.class.name}(id:#{object.id})"
-        result[key] += 1
+      @ar_base.each do |key, value|
+        key = "#{key[:model]}(id:#{key[:id]})"
+        result[key] += value[:count]
       end
       Hash[*(result.select{|k,v| v > 1}.flatten)]
     end
@@ -46,8 +50,8 @@ module CatTree
 
       unless (same_objects = same_ar_base_objects).empty?
         msg << "  Same objects:"
-        same_objects.keys.sort_by{|k| same_objects[k]}.reverse.each do |obj|
-          msg << "    #{obj}:\t#{same_objects[obj]}"
+        same_objects.keys.sort_by{|k| same_objects[k]}.reverse.each do |key|
+          msg << "    #{key}:\t#{same_objects[key]}"
         end
       end
       msg << ""

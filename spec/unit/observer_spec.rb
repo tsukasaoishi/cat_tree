@@ -14,15 +14,6 @@ describe CatTree::Observer do
   end
 
   context "#check" do
-    it "count to create AR::Base object" do
-      observer = CatTree::Observer.new
-      observer.check do
-        @number_of_object.times { User.new }
-      end
-
-      expect(observer.ar_base_count).to eq(@number_of_object)
-    end
-
     it "count to find AR::Base object" do
       observer = CatTree::Observer.new
       observer.check do
