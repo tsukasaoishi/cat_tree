@@ -13,10 +13,17 @@ module CatTree
 
     def notice(object)
       return if object.new_record?
-      key = {:model => object.class.name, :id => object.id}
+      key = "#{object.class.name}(id:#{object.id})"
       @ar_base[key] ||= {:count => 0, :callers => []}
       @ar_base[key][:count] += 1
-      @ar_base[key][:callers] << caller
+      if defined?(Rails)
+        root_path = Rails.root.to_s
+        root_path += "/" unless root_path.last == "/"
+        cal = caller.select{|c| c =~ %r!#{root_path}(app|lib)/!}
+        @ar_base[key][:callers] << cal unless cal.empty?
+      else
+        @ar_base[key][:callers] << caller
+      end
     end
 
     def ar_base_count
@@ -24,12 +31,7 @@ module CatTree
     end
 
     def same_ar_base_objects
-      result = Hash.new(0)
-      @ar_base.each do |key, value|
-        key = "#{key[:model]}(id:#{key[:id]})"
-        result[key] += value[:count]
-      end
-      Hash[*(result.select{|k,v| v > 1}.flatten)]
+      Hash[*(@ar_base.select{|k,v| v[:count] > 1}.flatten)]
     end
 
     def check
@@ -43,15 +45,19 @@ module CatTree
     private
 
     def output_message
-      return if @ar_base.empty? && @ar_relation.empty?
+      return if @ar_base.empty?
 
       msg = ["", "[CatTree]"]
       msg << "  ActiveRecord::Base:\t#{ar_base_count}"
 
       unless (same_objects = same_ar_base_objects).empty?
         msg << "  Same objects:"
-        same_objects.keys.sort_by{|k| same_objects[k]}.reverse.each do |key|
-          msg << "    #{key}:\t#{same_objects[key]}"
+        same_objects.keys.sort_by{|k| same_objects[k][:count]}.reverse.each do |key|
+          msg << "    #{key}:\t#{same_objects[key][:count]}"
+          same_objects[key][:callers].each do |cal|
+            cal.each{|c| msg << "      #{c}"}
+            msg << ""
+          end
         end
       end
       msg << ""
