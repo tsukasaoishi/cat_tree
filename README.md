@@ -1,6 +1,6 @@
 # CatTree
 
-[![Gem Version](https://badge.fury.io/rb/cat_tree.svg)](http://badge.fury.io/rb/cat_tree) [![Build Status](https://travis-ci.org/tsukasaoishi/cat_tree.svg?branch=master)](https://travis-ci.org/tsukasaoishi/ [![Code Climate](https://codeclimate.com/github/tsukasaoishi/cat_tree/badges/gpa.svg)](https://codeclimate.com/github/tsukasaoishi/cat_tree)
+[![Gem Version](https://badge.fury.io/rb/cat_tree.svg)](http://badge.fury.io/rb/cat_tree) [![Build Status](https://travis-ci.org/tsukasaoishi/cat_tree.svg?branch=master)](https://travis-ci.org/tsukasaoishi/cat_tree) [![Code Climate](https://codeclimate.com/github/tsukasaoishi/cat_tree/badges/gpa.svg)](https://codeclimate.com/github/tsukasaoishi/cat_tree)
 
 CatTree monitors ActiveRecord objects in development environment the number of objects and the number of same objects.
 It helps you decrease waste of memory and increase application performance.
