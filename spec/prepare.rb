@@ -1,1 +1,1 @@
-system("mysql -uroot < spec/db_dump.sql")
+system("mysql -uroot cat_tree_test < spec/db_dump.sql")
