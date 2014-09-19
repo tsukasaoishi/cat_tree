@@ -1,6 +1,7 @@
 language: ruby
 before_script:
   - mysql -e 'create database cat_tree_test;'
+  - "bundle exec ruby spec/prepare.rb"
 rvm:
   - 1.9.3
   - 2.0.0
