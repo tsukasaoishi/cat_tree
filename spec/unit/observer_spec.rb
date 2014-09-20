@@ -45,9 +45,9 @@ describe CatTree::Observer do
 
       result = observer.same_ar_base_objects
       expect(result.size).to eq(3)
-      result.each do |key, value|
-        expect(["User(id:1)", "Article(id:1)", "Article(id:2)"]).to include(key)
-        expect(value[:count]).to eq(@number_of_object)
+      result.each do |value|
+        expect(["User(id:1)", "Article(id:1)", "Article(id:2)"]).to include(value.title)
+        expect(value.count).to eq(@number_of_object)
       end
     end
   end

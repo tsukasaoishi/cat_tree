@@ -1,4 +1,5 @@
 require 'active_record'
+require 'cat_tree/observer/target_set'
 require 'cat_tree/logger'
 
 module CatTree
@@ -8,23 +9,19 @@ module CatTree
     end
 
     def initialize
-      @ar_base = {}
+      @target_set = TargetSet.new
     end
 
     def notice(object)
-      return if object.new_record?
-      key = "#{object.class.name}(id:#{object.id})"
-      @ar_base[key] ||= {:count => 0, :callers => []}
-      @ar_base[key][:count] += 1
-      record_backtrace(@ar_base[key][:callers]) if Config.backtrace
+      @target_set.notice(object)
     end
 
     def ar_base_count
-      @ar_base.values.inject(0){|t,v| t + v[:count]}
+      @target_set.object_count
     end
 
     def same_ar_base_objects
-      Hash[*(@ar_base.select{|k,v| v[:count] > 1}.flatten)]
+      @target_set.same_objects
     end
 
     def check
@@ -37,30 +34,19 @@ module CatTree
 
     private
 
-    def record_backtrace(callers)
-      if defined?(Rails)
-        root_path = Rails.root.to_s
-        root_path += "/" unless root_path.last == "/"
-        cal = caller.select{|c| c =~ %r!#{root_path}(app|lib)/!}
-        callers << cal unless cal.empty?
-      else
-        callers << caller
-      end
-    end
-
     def output_message
-      return if @ar_base.empty?
+      return if @target_set.empty?
 
       msg = ["", "[CatTree]"]
       msg << "  ActiveRecord::Base:\t#{ar_base_count}"
 
       unless (same_objects = same_ar_base_objects).empty?
         msg << "  Same objects:"
-        same_objects.keys.sort_by{|k| same_objects[k][:count]}.reverse.each do |key|
-          msg << "    #{key}:\t#{same_objects[key][:count]}"
+        same_objects.each do |same_obj|
+          msg << "    #{same_obj.title}:\t#{same_obj.count}"
 
           if Config.backtrace
-            same_objects[key][:callers].each do |cal|
+            same_obj.callers.each do |cal|
               cal.each{|c| msg << "      #{c}"}
               msg << ""
             end

@@ -14,3 +14,4 @@
 mkmf.log
 bundle
 gemfiles/*.lock
+*.gem
