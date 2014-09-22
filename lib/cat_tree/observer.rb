@@ -16,7 +16,7 @@ module CatTree
       key = "#{object.class.name}(id:#{object.id})"
       @ar_base[key] ||= {:count => 0, :callers => []}
       @ar_base[key][:count] += 1
-      record_backtrace if Config.backtrace
+      record_backtrace(@ar_base[key][:callers]) if Config.backtrace
     end
 
     def ar_base_count
@@ -37,14 +37,14 @@ module CatTree
 
     private
 
-    def record_backtrace
+    def record_backtrace(callers)
       if defined?(Rails)
         root_path = Rails.root.to_s
         root_path += "/" unless root_path.last == "/"
         cal = caller.select{|c| c =~ %r!#{root_path}(app|lib)/!}
-        @ar_base[key][:callers] << cal unless cal.empty?
+        callers << cal unless cal.empty?
       else
-        @ar_base[key][:callers] << caller
+        callers << caller
       end
     end
 
