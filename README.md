@@ -23,6 +23,29 @@ Processing by TopController#index as HTML
   ActiveRecord::Base:     102
   Same objects:
     User(id:12):  2
+
+Completed 200 OK in 1121.8ms (Views: 899.0ms | ActiveRecord: 222.8ms)
+```
+
+If you need backtrace of same objects,
+
+```ruby
+CatTree::Config.backtrace = true
+
+```
+
+then
+
+```
+Started GET "/top" for xxx.xxx.xxx.xxx at yyyy
+Processing by TopController#index as HTML
+  Parameters: {}
+  ....
+
+[CatTree]
+  ActiveRecord::Base:     102
+  Same objects:
+    User(id:12):  2
       /Users/tsukasa/dev/kaeruspoon/app/controllers/top_controller.rb:5:in `index'
 
       /Users/tsukasa/dev/kaeruspoon/app/controllers/top_controller.rb:6:in `index'

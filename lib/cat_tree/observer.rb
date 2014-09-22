@@ -16,14 +16,7 @@ module CatTree
       key = "#{object.class.name}(id:#{object.id})"
       @ar_base[key] ||= {:count => 0, :callers => []}
       @ar_base[key][:count] += 1
-      if defined?(Rails)
-        root_path = Rails.root.to_s
-        root_path += "/" unless root_path.last == "/"
-        cal = caller.select{|c| c =~ %r!#{root_path}(app|lib)/!}
-        @ar_base[key][:callers] << cal unless cal.empty?
-      else
-        @ar_base[key][:callers] << caller
-      end
+      record_backtrace if Config.backtrace
     end
 
     def ar_base_count
@@ -44,6 +37,17 @@ module CatTree
 
     private
 
+    def record_backtrace
+      if defined?(Rails)
+        root_path = Rails.root.to_s
+        root_path += "/" unless root_path.last == "/"
+        cal = caller.select{|c| c =~ %r!#{root_path}(app|lib)/!}
+        @ar_base[key][:callers] << cal unless cal.empty?
+      else
+        @ar_base[key][:callers] << caller
+      end
+    end
+
     def output_message
       return if @ar_base.empty?
 
@@ -54,9 +58,12 @@ module CatTree
         msg << "  Same objects:"
         same_objects.keys.sort_by{|k| same_objects[k][:count]}.reverse.each do |key|
           msg << "    #{key}:\t#{same_objects[key][:count]}"
-          same_objects[key][:callers].each do |cal|
-            cal.each{|c| msg << "      #{c}"}
-            msg << ""
+
+          if Config.backtrace
+            same_objects[key][:callers].each do |cal|
+              cal.each{|c| msg << "      #{c}"}
+              msg << ""
+            end
           end
         end
       end
