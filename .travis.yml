@@ -1,13 +1,15 @@
 language: ruby
+before_install:
+  - gem install bundler
 before_script:
   - mysql -e 'create database cat_tree_test;'
+  - bundle update
   - "bundle exec ruby spec/prepare.rb"
 rvm:
-  - 1.9.3
   - 2.0.0
-  - 2.1
-  - 2.2
-  - 2.3
+  - 2.1.8
+  - 2.2.4
+  - 2.3.0
   - ruby-head
 gemfile:
   - gemfiles/rails3.gemfile
